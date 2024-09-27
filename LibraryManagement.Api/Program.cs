@@ -11,8 +11,8 @@ using MySqlConnector;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<ProblemDetailsExceptionHandler>();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DataContext>((provider, optionsBuilder) =>
@@ -55,5 +55,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseExceptionHandler();
 
 app.Run();
