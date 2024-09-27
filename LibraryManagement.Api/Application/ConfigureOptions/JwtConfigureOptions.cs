@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using LibraryManagement.Api.Config;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 
-namespace LibraryManagement.Api.Config.ConfigureOptions;
+namespace LibraryManagement.Api.Application.ConfigureOptions;
 
 public class JwtConfigureOptions(JwtConfig config) : IConfigureNamedOptions<JwtBearerOptions>
 {

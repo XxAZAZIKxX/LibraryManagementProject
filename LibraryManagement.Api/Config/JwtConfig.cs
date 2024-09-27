@@ -23,7 +23,7 @@ public class JwtConfig : IConfig
         var tokenLifetimeInMinutes = uint.Parse(configuration.GetValueOrThrow("Jwt:TokenLifetime"));
         TokenLifetime = TimeSpan.FromMinutes(tokenLifetimeInMinutes);
         var secretKey = configuration.GetValueOrThrow("Jwt:Secret");
-        _secret = CryptographyTools.GetBytes(Encoding.UTF8.GetBytes(secretKey), size:32);
+        _secret = CryptographyTools.GetBytes(Encoding.UTF8.GetBytes(secretKey), size:64);
     }
 
     public TokenValidationParameters TokenValidationParameters =>

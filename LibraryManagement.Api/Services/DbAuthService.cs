@@ -1,22 +1,46 @@
-﻿using LibraryManagement.Api.Core;
+﻿using System.Security.Cryptography;
+using LibraryManagement.Api.Core;
 using LibraryManagement.Api.Repositories.Interfaces;
 using LibraryManagement.Api.Shared.Requests;
 using LibraryManagement.Api.Shared.Responses;
 using LibraryManagement.Api.Shared.Services;
 using LibraryManagement.Core.Utilities;
 using LibraryManagement.Api.Config;
+using LibraryManagement.Api.Core.Exceptions;
 using LibraryManagement.Api.Core.Extensions;
+using LibraryManagement.Api.Data;
+using LibraryManagement.Api.Data.Models;
 
 namespace LibraryManagement.Api.Services;
 
-public class DbAuthService(IAuthRepository authRepository, JwtConfig jwtConfig) : IAuthService
+public class DbAuthService(
+    IUserRepository userRepository,
+    IUserSaltRepository userSaltRepository,
+    DbUnitOfWork<DataContext> dbUnitOfWork,
+    JwtConfig jwtConfig
+    ) : IAuthService
 {
     public async Task<Result<TokenResponse>> AuthAsync(AuthRequest request)
     {
-        var hash = CryptographyTools.GetBytes(request.PasswordHash.ToLowerInvariant()).ToHexString();
+        var userResult = await userRepository.GetUserAsync(request.Username);
 
-        var user = await authRepository.GetUserAsync(request.Username, hash);
-        if (user is null) throw new NotImplementedException("User is not exists");
+        if (userResult is
+            {
+                IsFailed: true,
+                Exception: UserNotFoundException
+            }) return new NotImplementedException("Incorrect login");
+
+        var user = userResult.Value;
+
+        var userSaltResult = await userSaltRepository.GetUserSaltAsync(user.Id);
+        if (userSaltResult.IsFailed) return userSaltResult.Exception;
+
+        var hash = CryptographyTools
+            .GetBytes(request.PasswordHash, userSaltResult.Value.SaltBytes, 50_000)
+            .ToHexString();
+
+        if (user.PasswordHash != hash) return new NotImplementedException("Incorrect login");
+
         return new TokenResponse
         {
             UserId = user.Id,
@@ -26,18 +50,45 @@ public class DbAuthService(IAuthRepository authRepository, JwtConfig jwtConfig) 
 
     public async Task<Result<TokenResponse>> RegisterAsync(RegisterRequest request)
     {
-        var hash = CryptographyTools.GetBytes(request.PasswordHash.ToLowerInvariant()).ToHexString();
-        if (await authRepository.IsUsernameTakenAsync(request.Username))
+        if (await userRepository.IsUsernameTakenAsync(request.Username))
         {
-            throw new NotImplementedException("Username is taken");
+            return new NotImplementedException("Username is taken");
         }
 
-        var user = await authRepository.AddUserAsync(request.Username, hash);
-        return new TokenResponse()
+        await using var transaction = dbUnitOfWork.BeginTransaction();
+        try
         {
-            UserId = user.Id,
-            BearerToken = $"Bearer {jwtConfig.GenerateJwtToken(user.Id)}"
-        };
+            var user = await userRepository.AddUserAsync(new UserAccount
+            {
+                Username = request.Username,
+                PasswordHash = ""
+            });
+
+            var userSalt = await userSaltRepository.AddUserSaltAsync(new UserSalt()
+            {
+                User = user,
+                SaltBytes = RandomNumberGenerator.GetBytes(64)
+            });
+
+            var updateResult = await userRepository.UpdateUserAsync(user.Id, account =>
+            {
+                account.PasswordHash = CryptographyTools.GetBytes(request.PasswordHash, userSalt.SaltBytes, 50_000)
+                    .ToHexString();
+            });
+            if (updateResult.IsFailed) throw updateResult.Exception;
+
+            await transaction.CommitAsync();
+            return new TokenResponse
+            {
+                UserId = user.Id,
+                BearerToken = $"Bearer {jwtConfig.GenerateJwtToken(user.Id)}"
+            };
+        }
+        catch (Exception e)
+        {
+            await transaction.RollbackAsync();
+            return e;
+        }
     }
 
     public Task<Result<TokenResponse>> RefreshTokenAsync(string token)

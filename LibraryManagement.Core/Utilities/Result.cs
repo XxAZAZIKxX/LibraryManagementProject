@@ -3,7 +3,7 @@
 public readonly struct Result<T>
 {
     private readonly T? _value = default;
-    private readonly Exception? _exception = default;
+    private readonly Exception? _exception = null;
     public T Value => _value ?? throw new InvalidOperationException("Value is not setted!");
     public Exception Exception => _exception ?? throw new InvalidOperationException("Exception is not setted!");
     public bool IsSuccessful { get; } = false;
