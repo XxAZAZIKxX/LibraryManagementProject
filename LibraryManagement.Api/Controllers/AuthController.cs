@@ -1,7 +1,6 @@
-﻿using LibraryManagement.Api.Shared.Requests;
+﻿using LibraryManagement.Api.Shared.Requests.Auth;
 using LibraryManagement.Api.Shared.Responses;
 using LibraryManagement.Api.Shared.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.Api.Controllers;

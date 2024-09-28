@@ -1,4 +1,4 @@
-﻿using LibraryManagement.Api.Shared.Requests;
+﻿using LibraryManagement.Api.Shared.Requests.Auth;
 using LibraryManagement.Api.Shared.Responses;
 using LibraryManagement.Core.Utilities;
 

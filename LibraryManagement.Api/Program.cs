@@ -40,8 +40,13 @@ builder.Services.AddScoped<DbUnitOfWork<DataContext>>();
 #region Implementations
 
 builder.Services.AddScoped<IUserRepository, DbUserRepository>();
-builder.Services.AddScoped<IAuthService, DbAuthService>();
 builder.Services.AddScoped<IUserSaltRepository, DbUserSaltRepository>();
+builder.Services.AddScoped<IBookRepository, DbBookRepository>();
+// TODO BookAuthor
+// TODO BookGenre
+
+builder.Services.AddScoped<IAuthService, DbAuthService>();
+builder.Services.AddScoped<IBookService, DbBookService>();
 
 #endregion
 

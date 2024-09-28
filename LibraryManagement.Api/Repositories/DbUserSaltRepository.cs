@@ -1,7 +1,7 @@
-﻿using LibraryManagement.Api.Core.Exceptions;
-using LibraryManagement.Api.Data;
+﻿using LibraryManagement.Api.Data;
 using LibraryManagement.Api.Data.Models;
 using LibraryManagement.Api.Repositories.Interfaces;
+using LibraryManagement.Api.Shared.Exceptions;
 using LibraryManagement.Core.Utilities;
 using Microsoft.EntityFrameworkCore;
 

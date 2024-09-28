@@ -2,20 +2,26 @@
 
 public readonly struct Result<T>
 {
-    private readonly T? _value = default;
-    private readonly Exception? _exception = null;
+    private readonly T? _value;
+    private readonly Exception? _exception;
     public T Value => _value ?? throw new InvalidOperationException("Value is not setted!");
     public Exception Exception => _exception ?? throw new InvalidOperationException("Exception is not setted!");
-    public bool IsSuccessful { get; } = false;
+    public bool IsSuccessful { get; }
     public bool IsFailed => !IsSuccessful;
 
     public Result(T value)
     {
-        IsSuccessful = true;
         _value = value;
+        _exception = null;
+        IsSuccessful = true;
     }
 
-    public Result(Exception exception) => _exception = exception;
+    public Result(Exception exception)
+    {
+        _value = default;
+        _exception = exception;
+        IsSuccessful = false;
+    }
 
     public static implicit operator Result<T>(T value) => new(value);
     public static implicit operator Result<T>(Exception exception) => new(exception);

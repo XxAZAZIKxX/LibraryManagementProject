@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace LibraryManagement.Api.Core.Exceptions;
+namespace LibraryManagement.Api.Shared.Exceptions;
 
 public abstract class UnauthorizedException : ControlledScenarioException
 {

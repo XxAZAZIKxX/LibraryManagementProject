@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace LibraryManagement.Api.Core.Exceptions;
+namespace LibraryManagement.Api.Shared.Exceptions;
 
 public abstract class NotFoundException : ControlledScenarioException
 {
@@ -33,3 +33,9 @@ public class UserSaltNotFoundException(Guid userId) :
         {
             {"userId", userId.ToString()}
         });
+
+public class BookNotFoundException(Guid bookId) : NotFoundException($"Book with id `{bookId}` not found!",
+    new Dictionary<string, string>()
+    {
+        {"bookId", bookId.ToString()}
+    });

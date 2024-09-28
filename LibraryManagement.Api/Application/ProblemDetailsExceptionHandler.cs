@@ -1,4 +1,5 @@
 using LibraryManagement.Api.Core.Exceptions;
+using LibraryManagement.Api.Shared.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
