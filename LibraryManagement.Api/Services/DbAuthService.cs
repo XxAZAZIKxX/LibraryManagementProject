@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Security.Claims;
+using System.Security.Cryptography;
 using LibraryManagement.Api.Core;
 using LibraryManagement.Api.Repositories.Interfaces;
 using LibraryManagement.Api.Shared.Requests;
@@ -24,11 +25,7 @@ public class DbAuthService(
     {
         var userResult = await userRepository.GetUserAsync(request.Username);
 
-        if (userResult is
-            {
-                IsFailed: true,
-                Exception: UserNotFoundException
-            }) return new NotImplementedException("Incorrect login");
+        if (userResult.IsFailed) return new InvalidCredentialsException();
 
         var user = userResult.Value;
 
@@ -39,7 +36,7 @@ public class DbAuthService(
             .GetBytes(request.PasswordHash, userSaltResult.Value.SaltBytes, 50_000)
             .ToHexString();
 
-        if (user.PasswordHash != hash) return new NotImplementedException("Incorrect login");
+        if (user.PasswordHash != hash) return new InvalidCredentialsException();
 
         return new TokenResponse
         {
@@ -52,7 +49,7 @@ public class DbAuthService(
     {
         if (await userRepository.IsUsernameTakenAsync(request.Username))
         {
-            return new NotImplementedException("Username is taken");
+            return new UsernameIsTakenException(request.Username);
         }
 
         await using var transaction = dbUnitOfWork.BeginTransaction();
@@ -72,7 +69,8 @@ public class DbAuthService(
 
             var updateResult = await userRepository.UpdateUserAsync(user.Id, account =>
             {
-                account.PasswordHash = CryptographyTools.GetBytes(request.PasswordHash, userSalt.SaltBytes, 50_000)
+                account.PasswordHash = CryptographyTools
+                    .GetBytes(request.PasswordHash, userSalt.SaltBytes, 50_000)
                     .ToHexString();
             });
             if (updateResult.IsFailed) throw updateResult.Exception;
@@ -93,6 +91,16 @@ public class DbAuthService(
 
     public Task<Result<TokenResponse>> RefreshTokenAsync(string token)
     {
-        throw new NotImplementedException();
+        var valid = jwtConfig.IsJwtTokenSignatureValid(token, out var principal);
+        if (valid is false || principal is null) 
+            return Task.FromResult<Result<TokenResponse>>(new InvalidTokenException());
+
+        var userId = Guid.Parse(principal.Claims.GetUserId());
+
+        return Task.FromResult<Result<TokenResponse>>(new TokenResponse
+        {
+            UserId = userId,
+            BearerToken = $"Bearer {jwtConfig.GenerateJwtToken(userId)}"
+        });
     }
 }

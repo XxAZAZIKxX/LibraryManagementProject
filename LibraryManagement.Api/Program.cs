@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using LibraryManagement.Api.Application;
+using LibraryManagement.Api.Application.ConfigureOptions;
 using LibraryManagement.Api.Config;
 using LibraryManagement.Api.Core.Extensions;
 using LibraryManagement.Api.Data;
@@ -10,6 +11,7 @@ using LibraryManagement.Api.Services;
 using LibraryManagement.Api.Shared.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using MySqlConnector;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,6 +48,7 @@ builder.Services.AddScoped<IUserSaltRepository, DbUserSaltRepository>();
 builder.Services.LoadConfigsFromAssembly();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+builder.Services.AddSingleton<IConfigureOptions<JwtBearerOptions>, JwtConfigureOptions>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

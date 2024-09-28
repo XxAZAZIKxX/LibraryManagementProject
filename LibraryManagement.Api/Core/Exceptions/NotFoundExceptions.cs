@@ -28,7 +28,7 @@ public class UserNotFoundException : NotFoundException
 }
 
 public class UserSaltNotFoundException(Guid userId) : 
-    NotFoundException($"User salt for user with id `{userId}` not found", 
+    NotFoundException($"User salt for user with id `{userId}` not found!", 
         new Dictionary<string, string>()
         {
             {"userId", userId.ToString()}
