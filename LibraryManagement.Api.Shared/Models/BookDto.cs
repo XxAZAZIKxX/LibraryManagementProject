@@ -4,7 +4,7 @@ using LibraryManagement.Core.Utilities;
 
 namespace LibraryManagement.Api.Shared.Models;
 
-public class UpdateBook : ValidatableObjectBase
+public class BookDto : ValidatableObjectBase
 {
     [StringLength(50, MinimumLength = 3)]
     public string Title { get; set; }
@@ -12,12 +12,12 @@ public class UpdateBook : ValidatableObjectBase
     public Guid AuthorId { get; set; }
     public Guid GenreId { get; set; }
 
-    public UpdateBook()
+    public BookDto()
     {
 
     }
 
-    public UpdateBook(Book book)
+    public BookDto(Book book)
     {
         Title = book.Title;
         AuthorId = book.AuthorId;

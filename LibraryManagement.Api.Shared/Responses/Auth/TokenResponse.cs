@@ -1,4 +1,4 @@
-﻿namespace LibraryManagement.Api.Shared.Responses;
+﻿namespace LibraryManagement.Api.Shared.Responses.Auth;
 
 public class TokenResponse
 {

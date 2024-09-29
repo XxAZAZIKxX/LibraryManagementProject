@@ -1,17 +1,15 @@
-﻿using System.Security.Claims;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using LibraryManagement.Api.Core;
 using LibraryManagement.Api.Repositories.Interfaces;
-using LibraryManagement.Api.Shared.Responses;
 using LibraryManagement.Api.Shared.Services;
 using LibraryManagement.Core.Utilities;
 using LibraryManagement.Api.Config;
-using LibraryManagement.Api.Core.Exceptions;
 using LibraryManagement.Api.Core.Extensions;
 using LibraryManagement.Api.Data;
 using LibraryManagement.Api.Data.Models;
 using LibraryManagement.Api.Shared.Exceptions;
 using LibraryManagement.Api.Shared.Requests.Auth;
+using LibraryManagement.Api.Shared.Responses.Auth;
 
 namespace LibraryManagement.Api.Services;
 

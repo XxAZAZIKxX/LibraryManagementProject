@@ -1,6 +1,5 @@
 ﻿using LibraryManagement.Api.Shared.Exceptions;
 using LibraryManagement.Api.Shared.Models;
-using LibraryManagement.Api.Shared.Requests.Book;
 using LibraryManagement.Core.Models;
 using LibraryManagement.Core.Utilities;
 using Microsoft.AspNetCore.JsonPatch;
@@ -34,7 +33,7 @@ public interface IBookService
     /// </returns>
     /// <exception cref="BookAuthorNotFoundException"></exception>
     /// <exception cref="BookGenreNotFoundException"></exception>
-    Task<Result<Book>> AddBookAsync(AddBookRequest request);
+    Task<Result<Book>> AddBookAsync(BookDto request);
     /// <summary>
     /// Updates the existing book
     /// </summary>
@@ -45,7 +44,7 @@ public interface IBookService
     /// </returns>
     /// <exception cref="BookAuthorNotFoundException"></exception>
     /// <exception cref="BookGenreNotFoundException"></exception>
-    Task<Result<Book>> UpdateBookAsync(Guid bookId, JsonPatchDocument<UpdateBook> updateAction);
+    Task<Result<Book>> UpdateBookAsync(Guid bookId, JsonPatchDocument<BookDto> updateAction);
     /// <summary>
     /// Deletes a book
     /// </summary>

@@ -1,5 +1,5 @@
 ﻿using LibraryManagement.Api.Shared.Requests.Auth;
-using LibraryManagement.Api.Shared.Responses;
+using LibraryManagement.Api.Shared.Responses.Auth;
 using LibraryManagement.Api.Shared.Services;
 using Microsoft.AspNetCore.Mvc;
 

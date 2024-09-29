@@ -1,6 +1,5 @@
 ﻿using LibraryManagement.Api.Repositories.Interfaces;
 using LibraryManagement.Api.Shared.Models;
-using LibraryManagement.Api.Shared.Requests.Book;
 using LibraryManagement.Api.Shared.Services;
 using LibraryManagement.Core.Models;
 using LibraryManagement.Core.Utilities;
@@ -19,7 +18,7 @@ public class DbBookService(
 
     public async Task<Result<Book>> GetBookAsync(Guid bookId) => await bookRepository.GetBookAsync(bookId);
 
-    public async Task<Result<Book>> AddBookAsync(AddBookRequest request)
+    public async Task<Result<Book>> AddBookAsync(BookDto request)
     {
         var authorAsync = bookAuthorRepository.GetAuthorAsync(request.AuthorId);
         var genreAsync = bookGenreRepository.GetBookGenreAsync(request.GenreId);
@@ -41,12 +40,12 @@ public class DbBookService(
         });
     }
 
-    public async Task<Result<Book>> UpdateBookAsync(Guid bookId, JsonPatchDocument<UpdateBook> updateAction)
+    public async Task<Result<Book>> UpdateBookAsync(Guid bookId, JsonPatchDocument<BookDto> updateAction)
     {
         var bookResult = await bookRepository.GetBookAsync(bookId);
         if (bookResult.IsFailed) return bookResult.Exception;
 
-        var updateBook = new UpdateBook(bookResult.Value);
+        var updateBook = new BookDto(bookResult.Value);
         updateAction.ApplyTo(updateBook);
 
         if (updateBook.TryValidateObject(out var results) is false) 

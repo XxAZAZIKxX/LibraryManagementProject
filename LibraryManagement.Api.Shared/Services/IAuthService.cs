@@ -1,6 +1,6 @@
 ﻿using LibraryManagement.Api.Shared.Exceptions;
 using LibraryManagement.Api.Shared.Requests.Auth;
-using LibraryManagement.Api.Shared.Responses;
+using LibraryManagement.Api.Shared.Responses.Auth;
 using LibraryManagement.Core.Utilities;
 
 namespace LibraryManagement.Api.Shared.Services;

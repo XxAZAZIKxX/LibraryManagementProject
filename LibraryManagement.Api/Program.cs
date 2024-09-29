@@ -42,11 +42,13 @@ builder.Services.AddScoped<DbUnitOfWork<DataContext>>();
 builder.Services.AddScoped<IUserRepository, DbUserRepository>();
 builder.Services.AddScoped<IUserSaltRepository, DbUserSaltRepository>();
 builder.Services.AddScoped<IBookRepository, DbBookRepository>();
-// TODO BookAuthor
-// TODO BookGenre
+builder.Services.AddScoped<IBookAuthorRepository, DbBookAuthorRepository>();
+builder.Services.AddScoped<IBookGenreRepository, DbBookGenreRepository>();
 
 builder.Services.AddScoped<IAuthService, DbAuthService>();
 builder.Services.AddScoped<IBookService, DbBookService>();
+builder.Services.AddScoped<IBookAuthorService, DbBookAuthorService>();
+builder.Services.AddScoped<IBookGenreService, DbBookGenreService>();
 
 #endregion
 
