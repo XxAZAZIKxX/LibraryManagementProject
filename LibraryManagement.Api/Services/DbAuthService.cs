@@ -40,7 +40,7 @@ public class DbAuthService(
         return new TokenResponse
         {
             UserId = user.Id,
-            BearerToken = $"Bearer {jwtConfig.GenerateJwtToken(user.Id)}"
+            BearerToken = jwtConfig.GenerateJwtToken(user.Id)
         };
     }
 
@@ -78,7 +78,7 @@ public class DbAuthService(
             return new TokenResponse
             {
                 UserId = user.Id,
-                BearerToken = $"Bearer {jwtConfig.GenerateJwtToken(user.Id)}"
+                BearerToken = jwtConfig.GenerateJwtToken(user.Id)
             };
         }
         catch (Exception e)
@@ -99,7 +99,7 @@ public class DbAuthService(
         return Task.FromResult<Result<TokenResponse>>(new TokenResponse
         {
             UserId = userId,
-            BearerToken = $"Bearer {jwtConfig.GenerateJwtToken(userId)}"
+            BearerToken = jwtConfig.GenerateJwtToken(userId)
         });
     }
 }
