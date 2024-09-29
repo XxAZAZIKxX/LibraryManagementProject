@@ -21,7 +21,7 @@ public class DbBookService(
 
     public async Task<Result<Book>> AddBookAsync(AddBookRequest request)
     {
-        var authorAsync = bookAuthorRepository.GetBookAuthorAsync(request.AuthorId);
+        var authorAsync = bookAuthorRepository.GetAuthorAsync(request.AuthorId);
         var genreAsync = bookGenreRepository.GetBookGenreAsync(request.GenreId);
 
         await Task.WhenAll(genreAsync, authorAsync);
@@ -52,7 +52,7 @@ public class DbBookService(
         if (updateBook.TryValidateObject(out var results) is false) 
             return new ValidationException(results.ToArray());
 
-        var authorAsync = bookAuthorRepository.GetBookAuthorAsync(updateBook.AuthorId);
+        var authorAsync = bookAuthorRepository.GetAuthorAsync(updateBook.AuthorId);
         var genreAsync = bookGenreRepository.GetBookGenreAsync(updateBook.GenreId);
 
         await Task.WhenAll(genreAsync, authorAsync);

@@ -5,6 +5,7 @@ using LibraryManagement.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagement.Api.Controllers;
 
@@ -43,6 +44,10 @@ public class BooksController(IBookService bookService) : ControllerBase
     public async Task<IActionResult> DeleteBook([FromRoute] Guid bookId)
     {
         var result = await bookService.DeleteBookAsync(bookId);
-        return Ok(result ? "Deleted!" : "Already deleted!");
+        return Ok(new
+        {
+            Value = result,
+            Comment = result ? "Deleted" : "Was already deleted"
+        });
     }
 }

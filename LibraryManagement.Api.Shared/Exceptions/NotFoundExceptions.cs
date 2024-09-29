@@ -39,3 +39,15 @@ public class BookNotFoundException(Guid bookId) : NotFoundException($"Book with 
     {
         {"bookId", bookId.ToString()}
     });
+
+public class BookAuthorNotFoundException(Guid authorId) : NotFoundException($"Book author with id `{authorId}` not found!",
+    new Dictionary<string, string>()
+    {
+        {"authorId", authorId.ToString()}
+    });
+
+public class BookGenreNotFoundException(Guid genreId) : NotFoundException($"Book genre with id `{genreId}` not found!", 
+    new Dictionary<string, string>()
+    {
+        {"genreId", genreId.ToString()}
+    });
