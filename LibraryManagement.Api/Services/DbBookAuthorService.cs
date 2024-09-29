@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using LibraryManagement.Api.Repositories.Interfaces;
+﻿using LibraryManagement.Api.Repositories.Interfaces;
 using LibraryManagement.Api.Shared.Models;
 using LibraryManagement.Api.Shared.Services;
 using LibraryManagement.Core.Models;
 using LibraryManagement.Core.Utilities;
-using Microsoft.AspNetCore.JsonPatch;
+using SystemTextJsonPatch;
 using ValidationException = LibraryManagement.Api.Shared.Exceptions.ValidationException;
 
 namespace LibraryManagement.Api.Services;
@@ -23,7 +22,7 @@ public class DbBookAuthorService(IBookAuthorRepository authorRepository) : IBook
 
     public async Task<BookAuthor> AddAuthorAsync(BookAuthorDto request)
     {
-        return await authorRepository.AddAuthorAsync(new BookAuthor()
+        return await authorRepository.AddAuthorAsync(new BookAuthor
         {
             Name = request.Name,
             Surname = request.Surname

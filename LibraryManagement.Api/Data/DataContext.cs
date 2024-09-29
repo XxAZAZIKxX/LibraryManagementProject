@@ -9,10 +9,13 @@ public sealed class DataContext : DbContext
     public DbSet<UserAccount> Users { get; private set; }
     public DbSet<UserSalt> UserSalts { get; private set; }
     public DbSet<Book> Books { get; private set; }
-    public DbSet<BookAuthor> BookAuthors { get;private  set; }
+    public DbSet<BookAuthor> BookAuthors { get; private set; }
     public DbSet<BookGenre> BookGenres { get; private set; }
 
-    public DataContext(DbContextOptions<DataContext> options) : base(options) => Database.EnsureCreated();
+    public DataContext(DbContextOptions<DataContext> options) : base(options)
+    {
+        Database.EnsureCreated();
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

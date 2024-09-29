@@ -1,7 +1,7 @@
 ﻿using LibraryManagement.Api.Shared.Models;
 using LibraryManagement.Core.Models;
 using LibraryManagement.Core.Utilities;
-using Microsoft.AspNetCore.JsonPatch;
+using SystemTextJsonPatch;
 
 namespace LibraryManagement.Api.Shared.Services;
 

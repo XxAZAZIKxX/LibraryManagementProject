@@ -1,5 +1,4 @@
-﻿using LibraryManagement.Api.Core.Exceptions;
-using LibraryManagement.Api.Data;
+﻿using LibraryManagement.Api.Data;
 using LibraryManagement.Api.Data.Models;
 using LibraryManagement.Api.Repositories.Interfaces;
 using LibraryManagement.Api.Shared.Exceptions;
@@ -12,7 +11,7 @@ public class DbUserRepository(DataContext dataContext) : IUserRepository
 {
     public async Task<Result<UserAccount>> GetUserAsync(Guid userId)
     {
-        var user = await dataContext.Users.SingleOrDefaultAsync(p=>p.Id == userId);
+        var user = await dataContext.Users.SingleOrDefaultAsync(p => p.Id == userId);
         if (user is null) return new UserNotFoundException(userId);
         return user;
     }

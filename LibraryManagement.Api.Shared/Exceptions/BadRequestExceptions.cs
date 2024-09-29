@@ -6,6 +6,7 @@ namespace LibraryManagement.Api.Shared.Exceptions;
 public abstract class BadRequestException : ControlledScenarioException
 {
     public override int StatusCode => (int)HttpStatusCode.BadRequest;
+
     protected BadRequestException(string message,
         IDictionary<string, string>? additionalInfo = null) : base(message,
         additionalInfo)
@@ -14,13 +15,13 @@ public abstract class BadRequestException : ControlledScenarioException
 }
 
 public class UsernameIsTakenException(string username) :
-    BadRequestException("Username is taken", new Dictionary<string, string>()
+    BadRequestException("Username is taken", new Dictionary<string, string>
     {
-        {"username", username}
+        { "username", username }
     });
 
 public class ValidationException(ValidationResult[] validationResults)
-    : BadRequestException($"Validation failed for {validationResults.Length} members.", 
+    : BadRequestException($"Validation failed for {validationResults.Length} members.",
         GetValidationResults(validationResults))
 {
     private static IDictionary<string, string> GetValidationResults(ValidationResult[] results)

@@ -4,7 +4,11 @@ namespace LibraryManagement.Api.Core.Extensions;
 
 public static class EnumerableExtensions
 {
-    public static string GetUserId(this IEnumerable<Claim> claims) => claims.Single(p => p.Type == "userId").Value;
+    public static string GetUserId(this IEnumerable<Claim> claims)
+    {
+        return claims.Single(p => p.Type == "userId").Value;
+    }
+
     public static DateTimeOffset GetRefreshExpires(this IEnumerable<Claim> claims)
     {
         var single = claims.Single(p => p.Type == "refreshExpires").Value;

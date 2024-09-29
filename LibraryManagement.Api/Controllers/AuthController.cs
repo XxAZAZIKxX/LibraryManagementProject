@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.Api.Controllers;
 
-[ApiController, Route("api/[controller]")]
+[ApiController]
+[Route("api/[controller]")]
 public class AuthController(IAuthService authService) : ControllerBase
 {
     [HttpPost, Route("login")]
@@ -23,7 +24,8 @@ public class AuthController(IAuthService authService) : ControllerBase
     }
 
     [HttpPost, Route("refresh")]
-    public async Task<ActionResult<TokenResponse>> RefreshToken([FromHeader(Name = "Authorization")] string authorization)
+    public async Task<ActionResult<TokenResponse>> RefreshToken(
+        [FromHeader(Name = "Authorization")] string authorization)
     {
         if (authorization.StartsWith("Bearer ")) authorization = authorization[7..];
         var refreshTokenResult = await authService.RefreshTokenAsync(authorization);

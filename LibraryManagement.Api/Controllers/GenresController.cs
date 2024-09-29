@@ -2,8 +2,8 @@
 using LibraryManagement.Api.Shared.Services;
 using LibraryManagement.Core.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using SystemTextJsonPatch;
 
 namespace LibraryManagement.Api.Controllers;
 

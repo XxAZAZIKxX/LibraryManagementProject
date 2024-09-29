@@ -23,9 +23,18 @@ public readonly struct Result<T>
         IsSuccessful = false;
     }
 
-    public static implicit operator Result<T>(T value) => new(value);
-    public static implicit operator Result<T>(Exception exception) => new(exception);
+    public static implicit operator Result<T>(T value)
+    {
+        return new Result<T>(value);
+    }
 
-    public TResult Match<TResult>(Func<T, TResult> ifSuccessful, Func<Exception, TResult> ifFailed) =>
-        IsSuccessful ? ifSuccessful(Value) : ifFailed(Exception);
+    public static implicit operator Result<T>(Exception exception)
+    {
+        return new Result<T>(exception);
+    }
+
+    public TResult Match<TResult>(Func<T, TResult> ifSuccessful, Func<Exception, TResult> ifFailed)
+    {
+        return IsSuccessful ? ifSuccessful(Value) : ifFailed(Exception);
+    }
 }

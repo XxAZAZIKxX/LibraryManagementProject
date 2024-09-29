@@ -3,7 +3,7 @@ using LibraryManagement.Api.Shared.Models;
 using LibraryManagement.Api.Shared.Services;
 using LibraryManagement.Core.Models;
 using LibraryManagement.Core.Utilities;
-using Microsoft.AspNetCore.JsonPatch;
+using SystemTextJsonPatch;
 using ValidationException = LibraryManagement.Api.Shared.Exceptions.ValidationException;
 
 namespace LibraryManagement.Api.Services;
@@ -22,7 +22,7 @@ public class DbBookGenreService(IBookGenreRepository genreRepository) : IBookGen
 
     public async Task<BookGenre> AddBookGenreAsync(BookGenreDto request)
     {
-        return await genreRepository.AddBookGenreAsync(new BookGenre()
+        return await genreRepository.AddBookGenreAsync(new BookGenre
         {
             Title = request.Title
         });
@@ -33,7 +33,8 @@ public class DbBookGenreService(IBookGenreRepository genreRepository) : IBookGen
         var result = await genreRepository.GetBookGenreAsync(genreId);
         if (result.IsFailed) return result.Exception;
 
-        var genreDto = new BookGenreDto(new BookGenre());
+        var genreDto = new BookGenreDto(result.Value);
+        request.ApplyTo(genreDto);
 
         if (genreDto.TryValidateObject(out var results) is false)
             return new ValidationException(results.ToArray());

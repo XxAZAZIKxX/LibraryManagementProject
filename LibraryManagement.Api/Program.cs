@@ -25,7 +25,7 @@ builder.Services.AddDbContext<DataContext>((provider, optionsBuilder) =>
 {
     var config = provider.GetRequiredService<MySqlDatabaseConfig>();
 
-    var connectionString = new MySqlConnectionStringBuilder()
+    var connectionString = new MySqlConnectionStringBuilder
     {
         Server = config.Server, Database = config.Database, UserID = config.User, Password = config.Password
     }.ConnectionString;

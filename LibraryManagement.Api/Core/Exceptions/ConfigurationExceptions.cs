@@ -1,6 +1,6 @@
 ﻿namespace LibraryManagement.Api.Core.Exceptions;
 
-public class ConfigurationSectionNotFoundException(string path) 
+public class ConfigurationSectionNotFoundException(string path)
     : Exception($"Section with path `{path}` is missing!");
 
 public class ConfigurationSectionValueIsMissingException(string path)

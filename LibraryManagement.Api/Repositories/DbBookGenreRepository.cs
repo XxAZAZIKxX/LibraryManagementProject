@@ -16,7 +16,7 @@ public class DbBookGenreRepository(DataContext dataContext) : IBookGenreReposito
 
     public async Task<Result<BookGenre>> GetBookGenreAsync(Guid genreId)
     {
-        var singleOrDefault = await dataContext.BookGenres.SingleOrDefaultAsync(p=>p.Id == genreId);
+        var singleOrDefault = await dataContext.BookGenres.SingleOrDefaultAsync(p => p.Id == genreId);
         if (singleOrDefault is null) return new BookGenreNotFoundException(genreId);
         return singleOrDefault;
     }
@@ -45,7 +45,7 @@ public class DbBookGenreRepository(DataContext dataContext) : IBookGenreReposito
         var bookGenreResult = await GetBookGenreAsync(genreId);
         if (bookGenreResult.IsFailed) return false;
 
-        var bookGenre= bookGenreResult.Value;
+        var bookGenre = bookGenreResult.Value;
         dataContext.BookGenres.Remove(bookGenre);
         await dataContext.SaveChangesAsync();
         return true;

@@ -11,7 +11,7 @@ public class DbUserSaltRepository(DataContext dataContext) : IUserSaltRepository
 {
     public async Task<Result<UserSalt>> GetUserSaltAsync(Guid userId)
     {
-        var userSalt = await dataContext.UserSalts.SingleOrDefaultAsync(p=>p.UserId == userId);
+        var userSalt = await dataContext.UserSalts.SingleOrDefaultAsync(p => p.UserId == userId);
         if (userSalt is null) return new UserSaltNotFoundException(userId);
         return userSalt;
     }

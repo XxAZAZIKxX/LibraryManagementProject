@@ -7,20 +7,21 @@ namespace LibraryManagement.Api.Repositories.Interfaces;
 public interface IUserSaltRepository
 {
     /// <summary>
-    /// Get user salt from repository
+    ///     Get user salt from repository
     /// </summary>
     /// <param name="userId">The specified user ID</param>
     /// <returns>
-    /// if found - <see cref="UserSalt"/>
+    ///     if found - <see cref="UserSalt" />
     /// </returns>
     /// <exception cref="UserNotFoundException"></exception>
     Task<Result<UserSalt>> GetUserSaltAsync(Guid userId);
+
     /// <summary>
-    /// Add new user salt to repository
+    ///     Add new user salt to repository
     /// </summary>
     /// <param name="userSalt">A new user salt</param>
     /// <returns>
-    /// Added <see cref="UserSalt"/>
+    ///     Added <see cref="UserSalt" />
     /// </returns>
     Task<UserSalt> AddUserSaltAsync(UserSalt userSalt);
 }

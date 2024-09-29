@@ -2,8 +2,8 @@
 using LibraryManagement.Api.Shared.Services;
 using LibraryManagement.Core.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using SystemTextJsonPatch;
 
 namespace LibraryManagement.Api.Controllers;
 
@@ -32,7 +32,8 @@ public class BooksController(IBookService bookService) : ControllerBase
     }
 
     [HttpPatch, Route("{bookId:guid}")]
-    public async Task<ActionResult<Book>> UpdateBook([FromRoute] Guid bookId, [FromBody] JsonPatchDocument<BookDto> updateBook)
+    public async Task<ActionResult<Book>> UpdateBook([FromRoute] Guid bookId,
+        [FromBody] JsonPatchDocument<BookDto> updateBook)
     {
         var result = await bookService.UpdateBookAsync(bookId, updateBook);
         return result.Match(book => book, exception => throw exception);

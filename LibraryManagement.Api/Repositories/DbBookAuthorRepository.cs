@@ -16,7 +16,7 @@ public class DbBookAuthorRepository(DataContext dataContext) : IBookAuthorReposi
 
     public async Task<Result<BookAuthor>> GetAuthorAsync(Guid authorId)
     {
-        var singleOrDefault = await dataContext.BookAuthors.SingleOrDefaultAsync(p=>p.Id == authorId);
+        var singleOrDefault = await dataContext.BookAuthors.SingleOrDefaultAsync(p => p.Id == authorId);
         if (singleOrDefault is null) return new BookAuthorNotFoundException(authorId);
         return singleOrDefault;
     }

@@ -10,25 +10,12 @@ namespace LibraryManagement.Api.Config;
 
 public class JwtConfig : IConfig
 {
+    private readonly byte[] _secret;
+    
     public string Issuer { get; }
     public string Audience { get; }
     public TimeSpan TokenLifetime { get; }
     public TimeSpan RefreshTokenLifetime { get; }
-
-    private readonly byte[] _secret;
-    private SymmetricSecurityKey GetSymmetricSecurityKey() => new(_secret);
-
-    public JwtConfig(IConfiguration configuration)
-    {
-        Issuer = configuration.GetValueOrThrow("Jwt:Issuer");
-        Audience = configuration.GetValueOrThrow("Jwt:Audience");
-        var tokenLifetimeInMinutes = uint.Parse(configuration.GetValueOrThrow("Jwt:TokenLifetime"));
-        TokenLifetime = TimeSpan.FromMinutes(tokenLifetimeInMinutes);
-        var secretKey = configuration.GetValueOrThrow("Jwt:Secret");
-        _secret = CryptographyTools.GetBytes(Encoding.UTF8.GetBytes(secretKey), size: 64);
-        var refreshTokenLifetimeInDays = uint.Parse(configuration.GetValueOrThrow("Jwt:RefreshTokenLifetime"));
-        RefreshTokenLifetime = TimeSpan.FromDays(refreshTokenLifetimeInDays);
-    }
 
     public TokenValidationParameters TokenValidationParameters =>
         new()
@@ -47,10 +34,25 @@ public class JwtConfig : IConfig
             }
         };
 
+    public JwtConfig(IConfiguration configuration)
+    {
+        Issuer = configuration.GetValueOrThrow("Jwt:Issuer");
+        Audience = configuration.GetValueOrThrow("Jwt:Audience");
+        var tokenLifetimeInMinutes = uint.Parse(configuration.GetValueOrThrow("Jwt:TokenLifetime"));
+        TokenLifetime = TimeSpan.FromMinutes(tokenLifetimeInMinutes);
+        var secretKey = configuration.GetValueOrThrow("Jwt:Secret");
+        _secret = CryptographyTools.GetBytes(Encoding.UTF8.GetBytes(secretKey), size: 64);
+        var refreshTokenLifetimeInDays = uint.Parse(configuration.GetValueOrThrow("Jwt:RefreshTokenLifetime"));
+        RefreshTokenLifetime = TimeSpan.FromDays(refreshTokenLifetimeInDays);
+    }
+
+    private SymmetricSecurityKey GetSymmetricSecurityKey() => new(_secret);
+
     public string GenerateJwtToken(Guid userId)
     {
-        var jwt = new JwtSecurityToken(issuer: Issuer, expires: DateTime.UtcNow.Add(TokenLifetime),
-            claims: [
+        var jwt = new JwtSecurityToken(Issuer, expires: DateTime.UtcNow.Add(TokenLifetime),
+            claims:
+            [
                 new Claim("userId", userId.ToString()),
                 new Claim("refreshExpires",
                     DateTimeOffset.UtcNow.Add(RefreshTokenLifetime).ToUnixTimeSeconds().ToString())
