@@ -2,6 +2,7 @@
 using LibraryManagement.Api.Shared.Services;
 using LibraryManagement.Core.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using SystemTextJsonPatch;
 
